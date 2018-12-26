@@ -25,6 +25,7 @@ int initI2C()
     RCC_IOPENR |= BIT0;    // Turn on port A    
     RCC_APB1ENR |= BIT21;   // Turn on clock for I2C1
     // PA9 and PA10 will be used for I2C
+    GPIOA_OTYPER |= BIT9+BIT10; // Make bits PA9 and PA10 open drain outputs
     GPIOA_MODER |= BIT21 + BIT19;
     GPIOA_MODER &= ~(BIT20+BIT18);   
     // Alternate function 1 is I2C on PA9/PA10
