@@ -1,0 +1,13 @@
+uint8_t writeOLEDDataRegister(uint8_t RegNum,uint8_t Value);
+uint8_t readOLEDDataRegister(uint8_t RegNum);
+uint8_t writeOLEDCmdRegister(uint8_t RegNum,uint8_t Value);
+uint8_t readOLEDCmdRegister(uint8_t RegNum);
+uint8_t fillOLEDBytes(uint8_t RegNum, uint8_t Count, uint8_t Value);
+uint8_t writeOLEDBytes(uint8_t RegNum, uint8_t Count, uint8_t *Values);
+void resetOLED();
+void clearOLEDLine(int LineNumber);
+void clearDisplay();
+void writeOLEDLine(int LineNumber, uint8_t *Values);
+void writeOLEDText(int Col, int Row, const char *Text);
+void int2Text(char *Text, uint32_t Value);
+void int2Hex(char *Hex, uint32_t Value);
