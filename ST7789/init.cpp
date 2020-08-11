@@ -1,7 +1,8 @@
 /* initialization for the STM32L011 */
-void main();
+int main();
 void init(void);
 void Default_Handler(void);
+void Systick_Handler(void);
 extern void isr_usart2(void);
 // The following are 'declared' in the linker script
 extern unsigned char  INIT_DATA_VALUES;
@@ -9,12 +10,17 @@ extern unsigned char  INIT_DATA_START;
 extern unsigned char  INIT_DATA_END;
 extern unsigned char  BSS_START;
 extern unsigned char  BSS_END;
-void STACK_TOP(void);
+extern "C" { void STACK_TOP(void);} // This is defined in the linker script
+typedef void (*fptr)(void);
 // the section "vectors" is placed at the beginning of flash 
 // by the linker script
-const void * Vectors[] __attribute__((section(".vectors"))) ={
-	(void *)(STACK_TOP), 	/* Top of stack */ 
-	init,   		/* Reset Handler */
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+// the section "vectors" is placed at the beginning of flash 
+// by the linker script
+const fptr Vectors[] __attribute__((section(".vectors"))) ={
+	(fptr)(STACK_TOP), 	/* Top of stack */ 
+	init,   		     /* Reset Handler */
 	Default_Handler,	/* NMI */
 	Default_Handler,	/* Hard Fault */
 	Default_Handler,	/* Reserved */
@@ -28,7 +34,7 @@ const void * Vectors[] __attribute__((section(".vectors"))) ={
 	Default_Handler,	/* Reserved */
 	Default_Handler,	/* Reserved */
 	Default_Handler,	/* PendSV */
-	Default_Handler,	/* SysTick */	
+	Systick_Handler,	/* SysTick */	
 /* External interrupt handlers follow */
 	Default_Handler, 	/* 0: WWDG */
 	Default_Handler, 	/* 1: PVD */
@@ -86,3 +92,4 @@ void Default_Handler()
 {	
 	while(1);
 }
+#pragma GCC pop_options
